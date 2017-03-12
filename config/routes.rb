@@ -16,6 +16,8 @@ Rails.application.routes.draw do
     resources :things, except: [:new, :edit] do
       resources :thing_images, only: [:index, :create, :update, :destroy]
     end
+
+    resources :inquiries, except: [:new, :edit]
   end      
 
   get "/client-assets/:name.:format", :to => redirect("/client/client-assets/%{name}.%{format}")

@@ -1,0 +1,11 @@
+<div class="inquiry-list" ng-show="$ctrl.authz.canQuery">
+  <ul>
+    <li ng-repeat="item in $ctrl.items | orderBy:'title'" class="col-xs-12">
+      <a ui-sref="inquiries({id:item.id})" class="col-xs-4">
+        <span class="image_id id">{{item.id}}</span>
+        {{item.title}}
+      </a>
+      <span class="col-xs-6">{{item.question}}</span>
+    </li>
+  </ul>
+</div>

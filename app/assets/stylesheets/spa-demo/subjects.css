@@ -1,4 +1,6 @@
 
+form.inquiry-form .id,
+div.inquiry-list .id,
 form.thing-form .id,
 div.thing-list .id,
 form.image-form .id,
@@ -6,8 +8,20 @@ div.image-list .id {
   display: none;
 }
 
+sd-inquiry-editor form,
 sd-image-editor form,
 sd-thing-editor form {
   padding-left: 15px;
   padding-right: 15px;
+}
+
+.inquiry-list li {
+  border: solid 1px #CFC;
+  margin-bottom: 2px;
+}
+
+.inquiry-list li a {
+  border-right: solid 1px #CDC;
+  padding-right: 5px;
+  padding-left: 0px;
 }

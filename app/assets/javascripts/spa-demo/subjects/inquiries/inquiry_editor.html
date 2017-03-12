@@ -1,0 +1,52 @@
+<form class="inquiry-form row" name="inquiryform">
+  <span class="inquiry_id id">{{$ctrl.item.id}}</span>
+  <span class="invalid">{{$ctrl.item.errors.full_messages}}</span>
+
+  <div class="inquiry-title row col-lg-12">
+    <label class="col-xs-3">Title:</label>
+    <input class="col-xs-9"
+           name="inquiry-title" 
+           ng-model="$ctrl.item.title" 
+           ng-readonly="!$ctrl.authz.canUpdate"
+           maxlength="80"
+           pattern=".{5,}" title="5 character minimum for Title"/>
+    <span class="invalid">{{$ctrl.item.errors.title}}</span>
+  </div>
+
+  <div class="inquiry-question row col-lg-12">
+    <label class="col-xs-3">Question:</label>
+    <textarea class="col-xs-9"
+           name="inquiry-question" 
+           ng-model="$ctrl.item.question" 
+           ng-readonly="!$ctrl.authz.canUpdate"
+           maxlength="200"
+           pattern=".{2,}" title="2 character minimum for Question"></textarea> 
+    <span class="invalid">{{$ctrl.item.errors.question}}</span>
+  </div>
+
+  <div class="inquiry-controls">
+    <span ng-show="$ctrl.authz.authenticated">
+      <button name="inquiry-create"
+              ng-show="!$ctrl.item.id && $ctrl.authz.canCreate"
+              type="submit"
+              ng-disabled="inquiryform.$invalid"
+              ng-click="$ctrl.create()">Create Inquiry</button>
+      <span ng-show="$ctrl.item.id">
+        <button name="inquiry-update"
+                type="submit"
+                ng-show="$ctrl.authz.canUpdate" 
+                ng-disabled="!inquiryform.$dirty"
+                ng-click="$ctrl.update()">Update Inquiry</button>
+        <button name="inquiry-delete"
+                type="submit"
+                ng-show="$ctrl.authz.canDelete" 
+                ng-click="$ctrl.remove()">Delete Inquiry</button>
+      </span>
+    </span>
+    <button name="inquiry-clear"
+            type="submit"
+            ng-show="$ctrl.item.id || inquiryform.$dirty"
+            ng-click="$ctrl.clear()">Clear Inquiry</button>
+  </div>
+
+</form>

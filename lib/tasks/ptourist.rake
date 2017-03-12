@@ -4,6 +4,7 @@ namespace :ptourist do
   ORIGINATORS=["carol","alice"]
   BOYS=["greg","peter","bobby"]
   GIRLS=["marsha","jan","cindy"]
+  CUSTOMERS=["alice","greg","marsha","peter","jan","bobby"]
 
   def user_name first_name
     last_name = (first_name=="alice") ? "nelson" : "brady"
@@ -35,6 +36,9 @@ namespace :ptourist do
   end
   def originator_users
      @originator_users ||= users(ORIGINATORS)
+  end
+  def customer_users
+     @customer_users ||= users(CUSTOMERS)
   end
   def member_users
      @member_users ||= users(MEMBERS)
@@ -74,6 +78,11 @@ namespace :ptourist do
                 .tap {|ti| ti.priority=img[:priority] if img[:priority]}.save!
     end
   end
+  def create_inquiry customer, inq
+    puts "building inquiry for #{inq[:title]}, by #{customer.name}"
+    inquiry=Inquiry.create(customer_id: customer.id, title: inq[:title], question: inq[:question])
+    customer.add_role(Role::ORGANIZER, inquiry).save
+  end
 
   desc "reset all data"
   task reset_all: [:users,:subjects] do
@@ -83,6 +92,7 @@ namespace :ptourist do
   task delete_subjects: :environment do
     puts "removing #{Thing.count} things and #{ThingImage.count} thing_images"
     puts "removing #{Image.count} images"
+    puts "removing #{Inquiry.count} inquiries"
     DatabaseCleaner[:active_record].clean_with(:truncation, {:except=>%w[users]})
     DatabaseCleaner[:mongoid].clean_with(:truncation)
   end
@@ -109,6 +119,10 @@ namespace :ptourist do
 
     originator_users.each do |user|
       user.add_role(Role::ORIGINATOR, Thing).save
+    end
+
+    customer_users.each do |user|
+      user.add_role(Role::ORIGINATOR, Inquiry).save
     end
 
     puts "users:#{User.pluck(:name)}"
@@ -355,8 +369,43 @@ Work up a sweat in our 24-hour StayFit Gym, which features Life Fitness® cardio
      }
     create_image organizer, image
 
+    customer = get_user("peter")
+    inquiries = 
+        [{title: 'Aquarium prices', question: 'What are the entry prices to the aquarium?'}, 
+         {title: 'Aquarium discounts', question: 'Do children have discounts?'}]
+    inquiries.each {|inq| create_inquiry customer, inq}
+
+    customer = get_user("jan")
+    inquiries = 
+        [{title: 'World Trade Center Metro Stop', question: 'What is the closest metro stop to the World Trade Center?'}]
+    inquiries.each {|inq| create_inquiry customer, inq}
+
+    customer = get_user("bobby")
+    inquiries = 
+        [{title: 'Aquarium shows', question: 'Which shows does the aquarium offer?'}, 
+         {title: 'Aquarium aquatic mammals', question: 'Are there whales or dolphins?'},
+         {title: 'Aquarium shark', question: 'How many kind of sharks can we see?'}]
+    inquiries.each {|inq| create_inquiry customer, inq}
+
+    customer = get_user("alice")
+    inquiries = 
+        [{title: 'Yosemite National Park Camping Areas', question: 'Are there showers in the Camping Areas?'}, 
+         {title: 'Yosemite National Park Animal Attacks', question: 'What can I do if I am face to face with a bear?'}]
+    inquiries.each {|inq| create_inquiry customer, inq}
+    
+    customer = get_user("marsha")
+    inquiries = 
+        [{title: 'Yellow Stone National Park Foods', question: 'What kind of food can I bring? Are beers allowed?'}]
+    inquiries.each {|inq| create_inquiry customer, inq}
+
+    customer = get_user("greg")
+    inquiries = 
+        [{title: 'Florida alligator', question: 'Where can I see alligator shows?'}]
+    inquiries.each {|inq| create_inquiry customer, inq}
+
     puts "#{Thing.count} things created and #{ThingImage.count("distinct thing_id")} with images"
     puts "#{Image.count} images created and #{ThingImage.count("distinct image_id")} for things"
+    puts "#{Inquiry.count} inquiries created"
   end
 
 end
