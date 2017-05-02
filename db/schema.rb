@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170304202140) do
+ActiveRecord::Schema.define(version: 20170430165622) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,16 @@ ActiveRecord::Schema.define(version: 20170304202140) do
 
   add_index "images", ["creator_id"], name: "index_images_on_creator_id", using: :btree
   add_index "images", ["lng", "lat"], name: "index_images_on_lng_and_lat", using: :btree
+
+  create_table "inquiries", force: :cascade do |t|
+    t.string   "title",       null: false
+    t.text     "question",    null: false
+    t.integer  "customer_id", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "inquiries", ["customer_id"], name: "index_inquiries_on_customer_id", using: :btree
 
   create_table "roles", force: :cascade do |t|
     t.integer  "user_id",    null: false
@@ -61,15 +71,23 @@ ActiveRecord::Schema.define(version: 20170304202140) do
   add_index "thing_images", ["image_id"], name: "index_thing_images_on_image_id", using: :btree
   add_index "thing_images", ["thing_id"], name: "index_thing_images_on_thing_id", using: :btree
 
+  create_table "thing_tags", force: :cascade do |t|
+    t.text     "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "things", force: :cascade do |t|
-    t.string   "name",        null: false
+    t.string   "name",         null: false
     t.text     "description"
     t.text     "notes"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "thing_tag_id"
   end
 
   add_index "things", ["name"], name: "index_things_on_name", using: :btree
+  add_index "things", ["thing_tag_id"], name: "index_things_on_thing_tag_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "provider",               default: "email", null: false
@@ -103,4 +121,5 @@ ActiveRecord::Schema.define(version: 20170304202140) do
   add_foreign_key "roles", "users"
   add_foreign_key "thing_images", "images"
   add_foreign_key "thing_images", "things"
+  add_foreign_key "things", "thing_tags"
 end

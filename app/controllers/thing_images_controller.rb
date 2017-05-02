@@ -6,9 +6,10 @@ class ThingImagesController < ApplicationController
   before_action :get_image, only: [:image_things]
   before_action :get_thing_image, only: [:update, :destroy]
   before_action :authenticate_user!, only: [:create, :update, :destroy]
-  after_action :verify_authorized, except: [:subjects]
+  after_action :verify_authorized, except: [:subjects, :tags]
   #after_action :verify_policy_scoped, only: [:linkable_things]
   before_action :origin, only: [:subjects]
+  before_action :tag, only: [:tags]
 
   def index
     authorize @thing, :get_images?
@@ -50,6 +51,24 @@ class ThingImagesController < ApplicationController
         .with_position
       @thing_images=@thing_images.things    if subject && subject.downcase=="thing"
       @thing_images=ThingImage.with_distance(@origin, @thing_images) if distance.downcase=="true"
+      render "thing_images/index"
+    end
+  end
+
+  def tags
+    expires_in 1.minute, :public=>true
+    subject=params[:subject]
+    last_modified=ThingImage.last_modified
+    state="#{request.headers['QUERY_STRING']}:#{last_modified}"
+    #use eTag versus last_modified -- ng-token-auth munges if-modified-since
+    eTag="#{Digest::MD5.hexdigest(state)}"
+
+    if stale?  :etag=>eTag
+      @thing_images=ThingImage.by_tag(@tag)
+        .with_name
+        .with_caption
+        .with_position
+      @thing_images=@thing_images.things    if subject && subject.downcase=="thing"
       render "thing_images/index"
     end
   end
@@ -123,5 +142,9 @@ class ThingImagesController < ApplicationController
         raise ActionController::ParameterMissing.new(
           "an origin [lng/lat] required")
       end
+    end
+
+    def tag
+      @tag = ThingTag.find_by_name(params[:search_tag].to_s.downcase) if params[:search_tag].present?
     end
 end

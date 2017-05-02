@@ -1,0 +1,67 @@
+<div class="subjects-page col-xs-12">
+  <sd-areas sd-areas-side>
+    <div class="areas-left"
+         ng-hide="sideVM.isHidden('left')"
+         ng-class="sideVM.isHidden('right') ?'col-sm-12':'col-sm-6 col-md-5 col-lg-4'">
+      <sd-area label="Subjects"
+               position="left">
+
+        <sd-tabs>
+          <sd-tab label="Things">
+            <sd-current-tag-things></sd-current-tag-things>
+          </sd-tab>
+
+          <sd-tab label="Images">
+            <sd-current-tag-images></sd-current-tag-images>
+          </sd-tab>
+        </sd-tabs>
+
+      </sd-area>
+
+      <sd-area label="Details"
+               position="left">
+
+        <sd-tabs>
+          <sd-tab label="Thing">
+            <sd-current-tag-thing-info></sd-current-tag-thing-info>
+          </sd-tab>
+          <sd-tab label="Image">
+              <sd-current-tag-image-viewer name="details-area"              
+                                       min-width="400">
+              </sd-current-tag-image-viewer>
+          </sd-tab>
+
+        </sd-tabs>
+
+      </sd-area>
+    </div>
+    <div class="areas-right"
+         ng-hide="sideVM.isHidden('right')"
+         ng-class="sideVM.isHidden('left') ? 'col-sm-12':'col-sm-6 col-md-7 col-lg-8'">
+      <sd-area label="Map"
+               position="right">
+
+        <sd-tabs>
+          <sd-tab label="Map">
+            <sd-current-tags-map></sd-current-tags-map>
+          </sd-tab>
+          <sd-tab label="Things">
+            <sd-current-tag-things></sd-current-tag-things>
+          </sd-tab>
+          <sd-tab label="Images">
+            <sd-current-tag-images></sd-current-tag-images>
+          </sd-tab>
+          <sd-tab label="Thing">
+              <sd-current-tag-thing-info></sd-current-tag-thing-info>
+          </sd-tab>
+          <sd-tab label="Image">
+              <sd-current-tag-image-viewer name="map-area"
+                                       min-width="800">
+              </sd-current-tag-image-viewer>
+          </sd-tab>
+        </sd-tabs>
+
+      </sd-area>
+    </div> 
+  </sd-areas>
+</div>

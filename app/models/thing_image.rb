@@ -23,6 +23,15 @@ class ThingImage < ActiveRecord::Base
     scope=scope.by_distance(:origin=>origin, :reverse=>reverse) unless reverse.nil?
     return scope
   }
+  scope :without_orphans, ->{ where.not(thing_id: nil) }
+  scope :by_tag, ->(tag) {
+    if tag
+      scope=with_position.with_thing.without_orphans.where("things.thing_tag_id = #{tag.id}")
+    else
+      scope=with_position.with_thing.without_orphans
+    end
+    return scope
+  }
 
   def self.with_distance(origin, scope)
     scope.select("-1.0 as distance").with_position

@@ -32,7 +32,7 @@
 //= require spa-demo/geoloc/geocoder.service
 //= require spa-demo/geoloc/map.service
 //= require spa-demo/geoloc/my_location.service
-// require spa-demo/geoloc/jhu_location.config
+//= require spa-demo/geoloc/jhu_location.config
 //= require spa-demo/geoloc/current_origin/current_origin.service
 //= require spa-demo/geoloc/current_origin/current_origin_selector.component
 
@@ -68,3 +68,11 @@
 //= require spa-demo/subjects/current_subjects/current_subjects.component
 //= require spa-demo/subjects/current_images/current_images.component
 //= require spa-demo/subjects/current_things/current_things.component
+
+//= require spa-demo/tags/tags.module
+//= require spa-demo/tags/thing_type/thing_type.component
+//= require spa-demo/tags/thing_type/thing_type.service
+//= require spa-demo/tags/current_images/current_images.component
+//= require spa-demo/tags/current_tags/current_tags.service
+//= require spa-demo/tags/current_tags/current_tags.component
+//= require spa-demo/tags/current_things/current_things.component
